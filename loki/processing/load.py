@@ -25,6 +25,7 @@ class VideoClips():
         """
 
         self.videos = []
+        self.audios = None
         for name in filenames:
             self.videos.append(VideoFileClip(name))
 
@@ -58,3 +59,29 @@ class VideoClips():
         for i_count, stamp in enumerate(time_stamps):
             clip = self.videos[stamp[0]].subclip(stamp[1], stamp[2])
             clip.write_videofile(write_names[i_count], fps=write_fps)
+
+    def compute_audio_waveform(self, freq=44100):
+        """Compute the binaural audio time series
+
+        For each video stored, extract the binaural audio. This audio
+        is then stored in the attribute self.audios, but also returns
+        the list for use in further functions.
+
+        Keyword Arguments:
+        ------------------
+        freq -- int -- default=44100:
+            Frequency of the computed sound in Hz. Default is 44.1 kHz.
+
+        Return:
+        -------
+        audios -- list(np.ndarray):
+            Return a list of audio waveforms.
+
+        """
+        self.audios = []
+        for clip in self.videos:
+            audio = clip.audio
+            wav = audio.to_soundarray(fps=freq)
+            self.audios.append(wav)
+
+        return self.audios
