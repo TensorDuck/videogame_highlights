@@ -1,0 +1,10 @@
+# Ignore Everything
+*
+
+# But no these files
+!.gitignore
+!*.py
+!README.md
+
+# ... even if they are in subdirectories
+!*/
