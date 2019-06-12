@@ -22,6 +22,7 @@ class VideoClips():
 
     def __init__(self, filenames):
         self.videos = []
+        self.audio_freq = None
         self.audios = None
         self.decibels = None
         for name in filenames:
@@ -58,7 +59,7 @@ class VideoClips():
                 end_t = stamp[2]
                 write_names.append(f"vid{vid_idx}_{start_t}-{end_t}{write_ext}")
 
-        #Iterate over time_stamps and write out the specified clips        
+        #Iterate over time_stamps and write out the specified clips
         for i_count, stamp in enumerate(time_stamps):
             clip = self.videos[stamp[0]].subclip(stamp[1], stamp[2])
             clip.write_videofile(write_names[i_count], fps=write_fps)
@@ -80,6 +81,8 @@ class VideoClips():
         audios -- list(np.ndarray):
             Return a list of audio waveforms.
         """
+
+        self.audio_freq = 44100
         self.audios = []
         for clip in self.videos:
             audio = clip.audio
