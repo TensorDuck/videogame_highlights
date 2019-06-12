@@ -9,6 +9,11 @@ class VideoClips():
     VideoClips stores a series of video files and provides methods for
     editing and outputting clips from the video.
 
+    Arguments:
+    ----------
+    filenames -- list(str):
+        List of video filenames to load.
+
     Public Methods:
     ---------------
     save_clips():
@@ -16,16 +21,6 @@ class VideoClips():
     """
 
     def __init__(self, filenames):
-        """Load multiple videos and write out relevant clips/audio
-
-        Uses moviepy for loading video frames and audio.
-
-        Arguments:
-        ----------
-        filenames -- list(str):
-            List of video filenames to load.
-        """
-
         self.videos = []
         self.audios = None
         self.decibels = None
