@@ -28,6 +28,7 @@ class VideoClips():
 
         self.videos = []
         self.audios = None
+        self.decibels = None
         for name in filenames:
             self.videos.append(VideoFileClip(name))
 
