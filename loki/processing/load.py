@@ -49,6 +49,7 @@ class VideoClips():
             name format will be used.
         """
 
+        #If write_names was not given, use a generic name output format
         if write_names is None:
             write_names = []
             for stamp in time_stamps:
@@ -57,6 +58,7 @@ class VideoClips():
                 end_t = stamp[2]
                 write_names.append(f"vid{vid_idx}_{start_t}-{end_t}{write_ext}")
 
+        #Iterate over time_stamps and write out the specified clips        
         for i_count, stamp in enumerate(time_stamps):
             clip = self.videos[stamp[0]].subclip(stamp[1], stamp[2])
             clip.write_videofile(write_names[i_count], fps=write_fps)
