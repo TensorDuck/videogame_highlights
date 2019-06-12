@@ -52,7 +52,10 @@ class VideoClips():
         if write_names is None:
             write_names = []
             for stamp in time_stamps:
-                write_names.append("vid%d_%d-%d.%s" % (stamp[0], stamp[1], stamp[2], write_ext))
+                vid_idx = stamp[0]
+                start_t = stamp[1]
+                end_t = stamp[2]
+                write_names.append(f"vid{vid_idx}_{start_t}-{end_t}{write_ext}")
 
         for i_count, stamp in enumerate(time_stamps):
             clip = self.videos[stamp[0]].subclip(stamp[1], stamp[2])
