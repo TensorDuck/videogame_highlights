@@ -63,14 +63,14 @@ class VolumeModel():
                     loudest_increment = clip_increment
             else:
                 #If clip is not longer, check every window
-                start_indices = range(0, len(audio_idx) - search_window, search_jump)
+                start_indices = range(0, len(audioclip) - search_window, search_jump)
                 #Increment over every window
                 for start_idx in start_indices:
                     end_idx = start_idx + search_window
                     avg_loudness = np.sum(audioclip[start_idx:end_idx]) / float(search_window)
                     clip_increment = [audio_idx, start_idx/freq, end_idx/freq]
                     #check with previous results
-                    if loudness is None or avg_loudness > loudest:
+                    if loudest is None or avg_loudness > loudest:
                         loudest = avg_loudness
                         loudest_increment = clip_increment
 
