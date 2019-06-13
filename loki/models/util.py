@@ -36,6 +36,8 @@ def sort_scores_and_remove_overlap(n_top, scores, clip_indices):
         if not is_overlapping(best_scenes, this_scene):
             best_scenes.append(this_scene)
             best_scores.append(this_score)
+            #increment found index by 1
+            n_found += 1
 
         #increment scene_index by 1
         scene_index += 1
