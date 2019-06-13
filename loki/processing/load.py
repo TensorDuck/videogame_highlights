@@ -1,7 +1,5 @@
 """Class and methods for handling loading of video files"""
 from moviepy.editor import VideoFileClip
-from librosa import power_to_db
-import numpy as np
 
 class VideoClips():
     """Load multiple videos and write out relevant clips/audio
@@ -24,7 +22,6 @@ class VideoClips():
         self.videos = []
         self.audio_freq = None
         self.audios = None
-        self.decibels = None
         for name in filenames:
             self.videos.append(VideoFileClip(name))
 
@@ -90,26 +87,3 @@ class VideoClips():
             self.audios.append(wav)
 
         return self.audios
-
-    def compute_decibels(self, freq=44100):
-        """Compute the total decibels from an audio waveform
-
-        Compute the power by taking the square of the waveform. If the
-        audio is binaural, then sum up the power of each audio channel.
-        """
-
-        self.decibels = []
-
-        if self.audios is None:
-            self.compute_audio_waveform(freq=freq)
-
-        for binaural in self.audios:
-            power = binaural ** 2 # square for the power
-            #sum up binaural audio channel
-            if power.ndim == 2:
-                power = np.sum(power, axis=1)
-
-            decibel = power_to_db(power)
-            self.decibels.append(decibel)
-
-        return self.decibels
