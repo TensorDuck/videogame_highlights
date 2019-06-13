@@ -2,6 +2,8 @@
 import math
 import numpy as np
 
+from .util import sort_scores_and_remove_overlap
+
 class VolumeModel():
     """Find the loudest sections in a set of videos
 
@@ -19,7 +21,7 @@ class VolumeModel():
         self.search_length = search_length
         self.search_increment = search_increment
 
-    def predict(self, vclips, freq=44100):
+    def predict(self, vclips, freq=44100, n_predict=1):
         """Find the loudest section in the inputted video clips
 
         Take the input vclips and search over every video. Compute the
@@ -37,6 +39,8 @@ class VolumeModel():
         ------------------
         freq -- int -- default=44100
             Frequency in Hz to extract the audio over.
+        n_predict -- int -- default=1
+            Return the top n_predict non-overlapping scenes.
         """
 
         #extract the volume from vclips
@@ -47,8 +51,8 @@ class VolumeModel():
         search_jump = math.floor(self.search_increment * freq)
 
         #store the loudest section and increment
-        loudest = None
-        loudest_increment = None
+        all_loudness_scores = []
+        all_scenes = []
 
         #check each audio clip
         for audio_idx, audioclip in enumerate(loudness):
@@ -57,10 +61,9 @@ class VolumeModel():
                 #if longer, compare average volume of this portion
                 avg_loudness = np.sum(audioclip) / float(len(audioclip))
                 clip_increment = [audio_idx, 0, len(audioclip)/freq]
-                #check with previous results
-                if loudest is None or avg_loudness > loudest:
-                    loudest = avg_loudness
-                    loudest_increment = clip_increment
+                #append to lists
+                all_loudness_scores.append(avg_loudness)
+                all_scenes.append(clip_increment)
             else:
                 #If clip is not longer, check every window
                 start_indices = range(0, len(audioclip) - search_window, search_jump)
@@ -69,9 +72,11 @@ class VolumeModel():
                     end_idx = start_idx + search_window
                     avg_loudness = np.sum(audioclip[start_idx:end_idx]) / float(search_window)
                     clip_increment = [audio_idx, start_idx/freq, end_idx/freq]
-                    #check with previous results
-                    if loudest is None or avg_loudness > loudest:
-                        loudest = avg_loudness
-                        loudest_increment = clip_increment
+                    #append to lists
+                    all_loudness_scores.append(avg_loudness)
+                    all_scenes.append(clip_increment)
+
+        #return the top scores
+        sort_scores_and_remove_overlap(n_predict, all_loudness_scores, all_scenes)
 
         return loudest_increment, avg_loudness
