@@ -1,0 +1,11 @@
+# Ignore Everything
+*
+
+# But no these files
+!.gitignore
+!*.py
+!README.md
+!build/add_path.sh
+
+# ... even if they are in subdirectories
+!*/
