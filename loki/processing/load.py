@@ -32,7 +32,7 @@ class VideoClips():
 
         Arguments:
         ----------
-        time_stamps -- Nx3 list([int, float, float]):
+        time_stamps -- Nx3 list or np.ndarray:
             Nx3 List giving the video index, followed by the start and
             stop times in seconds.
 
@@ -51,14 +51,14 @@ class VideoClips():
         if write_names is None:
             write_names = []
             for stamp in time_stamps:
-                vid_idx = stamp[0]
+                vid_idx = int(stamp[0])
                 start_t = stamp[1]
                 end_t = stamp[2]
                 write_names.append(f"vid{vid_idx}_{start_t}-{end_t}{write_ext}")
 
         #Iterate over time_stamps and write out the specified clips
         for i_count, stamp in enumerate(time_stamps):
-            clip = self.videos[stamp[0]].subclip(stamp[1], stamp[2])
+            clip = self.videos[int(stamp[0])].subclip(stamp[1], stamp[2])
             clip.write_videofile(write_names[i_count], fps=write_fps)
 
     def compute_audio_waveform(self, freq=44100):

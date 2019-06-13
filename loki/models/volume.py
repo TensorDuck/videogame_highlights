@@ -48,7 +48,7 @@ class VolumeModel():
 
         #store the loudest section and increment
         all_loudness_scores = np.zeros(0)
-        all_scenes = []
+        all_scenes = np.zeros((0,3))
 
         #check each audio clip
         for audio_idx, audioclip in enumerate(loudness):
@@ -56,10 +56,10 @@ class VolumeModel():
             if len(audioclip) <= search_window:
                 #if longer, compare average volume of this portion
                 avg_loudness = np.sum(audioclip) / float(len(audioclip))
-                clip_increment = [audio_idx, 0, len(audioclip)/freq]
+                clip_increment = np.array([audio_idx, 0, len(audioclip)/freq]).reshape((1,3))
                 #append to lists
                 all_loudness_scores = np.append(all_loudness_scores, avg_loudness)
-                all_scenes.append(clip_increment)
+                all_scenes = np.append(all_scenes, clip_increment, axis=0)
             else:
                 #If clip is not longer, check every window
                 start_indices = range(0, len(audioclip) - search_window, search_jump)
@@ -67,10 +67,10 @@ class VolumeModel():
                 for start_idx in start_indices:
                     end_idx = start_idx + search_window
                     avg_loudness = np.sum(audioclip[start_idx:end_idx]) / float(search_window)
-                    clip_increment = [audio_idx, start_idx/freq, end_idx/freq]
+                    clip_increment = np.array([audio_idx, start_idx/freq, end_idx/freq]).reshape((1,3))
                     #append to lists
                     all_loudness_scores = np.append(all_loudness_scores, avg_loudness)
-                    all_scenes.append(clip_increment)
+                    all_scenes = np.append(all_scenes, clip_increment, axis=0)
 
         #return the top scores
         top_scores, top_scenes = sort_scores_and_remove_overlap(n_predict, all_loudness_scores, all_scenes)
