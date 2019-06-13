@@ -21,19 +21,18 @@ class VolumeModel():
         self.search_length = search_length
         self.search_increment = search_increment
 
-    def predict(self, vclips, freq=44100, n_predict=1):
+    def predict(self, loudness, freq=44100, n_predict=1):
         """Find the loudest section in the inputted video clips
 
-        Take the input vclips and search over every video. Compute the
-        total volume in the increment self.search_length and then
-        return the video index and time index corresponding to the
-        overall loudest portion.
+        Take the input loudness generated from a video and search over
+        every volume array to determine the clips with the overall
+        loudest moments. Return the video index and time index
+        corresponding to the overall loudest portion.
 
         Arguments:
         ----------
-        vclips -- loki.VideoClips:
-            The VideoClips object containing the desired video clips to
-            search over.
+        loudness -- list[np.ndarray(float)]:
+            List of all total volume of multiple vidoeo clips.
 
         Keywrod Arguments:
         ------------------
@@ -42,9 +41,6 @@ class VolumeModel():
         n_predict -- int -- default=1
             Return the top n_predict non-overlapping scenes.
         """
-
-        #extract the volume from vclips
-        loudness = vclips.compute_decibels(freq=freq)
 
         #Define search windows in array index lengths
         search_window = math.floor(self.search_length * freq)
