@@ -77,6 +77,6 @@ class VolumeModel():
                     all_scenes.append(clip_increment)
 
         #return the top scores
-        sort_scores_and_remove_overlap(n_predict, all_loudness_scores, all_scenes)
+        top_scores, top_scenes = sort_scores_and_remove_overlap(n_predict, all_loudness_scores, all_scenes)
 
-        return loudest_increment, avg_loudness
+        return top_scores, top_scenes
