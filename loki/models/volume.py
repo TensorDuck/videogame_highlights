@@ -58,7 +58,7 @@ class VolumeModel():
                 avg_loudness = np.sum(audioclip) / float(len(audioclip))
                 clip_increment = [audio_idx, 0, len(audioclip)/freq]
                 #check with previous results
-                if loudness is None or avg_loudness > loudest:
+                if loudest is None or avg_loudness > loudest:
                     loudest = avg_loudness
                     loudest_increment = clip_increment
             else:
