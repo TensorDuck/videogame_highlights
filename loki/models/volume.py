@@ -51,7 +51,7 @@ class VolumeModel():
         search_jump = math.floor(self.search_increment * freq)
 
         #store the loudest section and increment
-        all_loudness_scores = []
+        all_loudness_scores = np.zeros(0)
         all_scenes = []
 
         #check each audio clip
@@ -62,7 +62,7 @@ class VolumeModel():
                 avg_loudness = np.sum(audioclip) / float(len(audioclip))
                 clip_increment = [audio_idx, 0, len(audioclip)/freq]
                 #append to lists
-                all_loudness_scores.append(avg_loudness)
+                all_loudness_scores = np.append(all_loudness_scores, avg_loudness)
                 all_scenes.append(clip_increment)
             else:
                 #If clip is not longer, check every window
@@ -73,7 +73,7 @@ class VolumeModel():
                     avg_loudness = np.sum(audioclip[start_idx:end_idx]) / float(search_window)
                     clip_increment = [audio_idx, start_idx/freq, end_idx/freq]
                     #append to lists
-                    all_loudness_scores.append(avg_loudness)
+                    all_loudness_scores = np.append(all_loudness_scores, avg_loudness)
                     all_scenes.append(clip_increment)
 
         #return the top scores

@@ -13,9 +13,9 @@ def sort_scores_and_remove_overlap(n_top, scores, clip_indices):
     ----------
     n_top -- int:
         The number of top scoring scenes to return.
-    scores -- list(float) or np.ndarray:
-        The score of each scene, where higher numbers translate to
-        more relevant scenes.
+    scores -- np.ndarray(N,):
+        The score for each of the N scenes, where higher numbers
+        translate to more relevant scenes.
     clip_indices -- list([int, float, float]):
         List of video indices, and time stamps in seconds for each
         scene.
