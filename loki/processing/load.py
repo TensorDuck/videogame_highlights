@@ -91,7 +91,7 @@ class VideoClips():
 
         return self.audios
 
-    def compute_decibels(self):
+    def compute_decibels(self, freq=44100):
         """Compute the total decibels from an audio waveform
 
         Compute the power by taking the square of the waveform. If the
@@ -101,7 +101,7 @@ class VideoClips():
         self.decibels = []
 
         if self.audios is None:
-            self.compute_audio_waveform()
+            self.compute_audio_waveform(freq=freq)
 
         for binaural in self.audios:
             power = binaural ** 2 # square for the power
