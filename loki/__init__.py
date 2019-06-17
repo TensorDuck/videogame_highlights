@@ -1,2 +1,2 @@
 from .processing import VideoClips, compute_decibels
-from .models import VolumeModel
+from .models import VolumeModel, VolumeClassifier
