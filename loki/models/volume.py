@@ -7,6 +7,18 @@ from .util import sort_scores_and_remove_overlap
 import sklearn.metrics as skmet
 
 def compute_average_volume(audioclip):
+    """Return average volume in an audioclip
+
+    Arguments:
+    ----------
+    audioclip -- np.ndarray:
+        A trace of the volume.
+
+    Return:
+    -------
+    avg_loudness -- float:
+        Average value of the volume over the whole trace.
+    """
     avg_loudness = np.sum(audioclip) / float(len(audioclip))
 
     return avg_loudness
