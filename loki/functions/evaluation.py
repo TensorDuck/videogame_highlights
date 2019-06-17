@@ -13,6 +13,9 @@ def get_confusion_matrix(actual, predicted):
 
     Return:
     -------
+    results -- dict:
+        Contains the cm (confusion matrix), accuracy, precision and
+        recall.
     """
     cm = skmet.confusion_matrix(test_values, results)
 
@@ -26,12 +29,18 @@ def get_confusion_matrix(actual, predicted):
     return results
 
 def print_confusion_matrix(actual, predicted):
-    """Print out the confusion matrix"""
+    """Print out the confusion matrix
 
+    Arguments:
+    ----------
+    actual -- np.ndarray:
+        The atual classes,
+    predicted -- np.ndarray:
+        The inferred classes
+    """
     results = get_confusion_matrix(actual, predicted)
 
     print(cm)
-
     print(f"Accuracy: {accuracy}")
     print(f"precision: {precision}")
     print(f"recall: {recall}")
