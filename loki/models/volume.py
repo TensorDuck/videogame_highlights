@@ -48,7 +48,7 @@ class VolumeClassifier():
             uninteresting.
         """
         average_loudness = []
-        for audioclip in self.training_x:
+        for audioclip in training_x:
             average_loudness.append(compute_average_volume(audioclip))
         average_loudness = np.array(average_loudness)
 
