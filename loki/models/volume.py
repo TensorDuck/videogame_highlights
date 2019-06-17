@@ -65,7 +65,7 @@ class VolumeClassifier():
 
         #check every possible cutoff
         for cutoff in possible_cutoffs:
-            predicted_values = np.zeros(len(average_loudess))
+            predicted_values = np.zeros(len(average_loudness))
             predicted_values[np.where(average_loudness > cutoff)] = 1
             loss = skmet.hamming_loss(training_y, predicted_values)
             if loss < best_loss:
