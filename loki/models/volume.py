@@ -42,6 +42,42 @@ class VolumeClassifier():
     def __init__(self):
         self.volume_cutoff = 0
 
+    def save(self, savefile=None):
+        """Save the model's learned parameters
+
+        Write out the volume_cutoff to a file. If no file is specified,
+        then write into volume_classifier_model.dat in the current
+        directory.
+
+        Keyword Arguments:
+        ------------------
+        savefile -- str -- default=None:
+            The file name to write the parameters into.
+        """
+        if savefile is None:
+            savefile = "volume_classifier_model.dat"
+        f = open(savefile, "w")
+        f.write(f"volume_cutoff = {self.volume_cutoff}\n")
+        f.close()
+
+    def load(self, savefile):
+        """Load a previous model's learned parameters
+
+        Arguments:
+        ----------
+        savefile -- str -- default=None:
+            The file name to write the parameters into.
+        """
+        f = open(savefile, "r")
+
+        for line in f:
+            #load the parameters one by one
+            stuff = line.strip().split()
+            if stuff[0] == "volume_cutoff":
+                self.volume_cutoff = float(stuff[2])
+        f.close()
+
+
     def train(self, training_x, training_y):
         """Train the volume classifier
 
