@@ -1,10 +1,9 @@
 """Class and methods for detecting loudest portions of videos"""
 import math
 import numpy as np
+import sklearn.metrics as skmet
 
 from .util import sort_scores_and_remove_overlap
-
-import sklearn.metrics as skmet
 
 def compute_average_volume(audioclip):
     """Return average volume in an audioclip
