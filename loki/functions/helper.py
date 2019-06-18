@@ -35,7 +35,7 @@ def load_clips_from_dir(target_dir=None):
     fullpath_files = []
     for fil in all_files:
         fullpath_files.append(f"{target_dir}/{fil}")
-    print(fullpath_files)
+
     clips = processing.VideoClips(fullpath_files)
 
     return clips
