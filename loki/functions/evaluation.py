@@ -40,7 +40,7 @@ def print_confusion_matrix(actual, predicted):
     """
     results = get_confusion_matrix(actual, predicted)
 
-    print(cm)
-    print(f"Accuracy: {accuracy}")
-    print(f"precision: {precision}")
-    print(f"recall: {recall}")
+    print(results["cm"])
+    print(f"Accuracy: {results['accuracy']}")
+    print(f"precision: {results['precision']}")
+    print(f"recall: {results['recall']}")
