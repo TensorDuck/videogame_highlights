@@ -24,7 +24,7 @@ def get_confusion_matrix(actual, predicted):
     precision = cm[1,1] / (cm[0,1] + cm[1,1]) # true positives over false positives and true positives
     recall = cm[1,1] / (cm[1,0] + cm[1,1]) # True positives over false negatives and true positives
 
-    results = {"cm":cm, "accuracy":accuracy, "precision":precision, "recall":recall}
+    results = {'cm':cm, 'accuracy':accuracy, 'precision':precision, 'recall':recall}
 
     return results
 
@@ -40,7 +40,7 @@ def print_confusion_matrix(actual, predicted):
     """
     results = get_confusion_matrix(actual, predicted)
 
-    print(results["cm"])
+    print(results['cm'])
     print(f"Accuracy: {results['accuracy']}")
     print(f"precision: {results['precision']}")
     print(f"recall: {results['recall']}")
