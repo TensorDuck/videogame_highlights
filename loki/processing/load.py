@@ -19,11 +19,12 @@ class VideoClips():
     """
 
     def __init__(self, filenames):
-        self.videos = []
+        #save the filenames and avoid pass by reference errors
+        self.filenames = filenames[:]
+
+        #these are attributes resultant from later analysis
         self.audio_freq = None
         self.audios = None
-        for name in filenames:
-            self.videos.append(VideoFileClip(name))
 
     def write_clips(self, time_stamps, write_fps=12, write_ext=".mp4", write_names=None):
         """Write selected clips to a file
@@ -58,7 +59,8 @@ class VideoClips():
 
         #Iterate over time_stamps and write out the specified clips
         for i_count, stamp in enumerate(time_stamps):
-            clip = self.videos[int(stamp[0])].subclip(stamp[1], stamp[2])
+            this_vid = VideoFileClip(self.filenames[0])
+            clip = this_vid.subclip(stamp[1], stamp[2])
             clip.write_videofile(write_names[i_count], fps=write_fps)
 
     def compute_audio_waveform(self, freq=44100):
@@ -81,7 +83,8 @@ class VideoClips():
 
         self.audio_freq = 44100
         self.audios = []
-        for clip in self.videos:
+        for fname in self.filenames:
+            clip = VideoFileClip(fname)
             audio = clip.audio
             wav = audio.to_soundarray(fps=freq)
             self.audios.append(wav)
