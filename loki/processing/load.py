@@ -26,6 +26,10 @@ class VideoClips():
         self.audio_freq = None
         self.audios = None
 
+    @property
+    def nclips(self):
+        return len(self.filenames)
+
     def write_clips(self, time_stamps, write_fps=12, write_ext=".mp4", write_names=None):
         """Write selected clips to a file
 
