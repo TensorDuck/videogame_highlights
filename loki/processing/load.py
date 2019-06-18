@@ -1,6 +1,33 @@
 """Class and methods for handling loading of video files"""
 from moviepy.editor import VideoFileClip
 
+def append_clips(first, second):
+    """Append two different VideoClips objects
+
+    Arguments:
+    ----------
+    first -- loki.VideoClips:
+        These filenames will go first.
+    second -- loki.VideoClips:
+        These filenames will follow the filenames in first.
+
+    Return:
+    -------
+    vclips -- loki.VideoClips:
+        A new VideoClips object with both sets of filenames stored.
+    """
+    #collect the filenames
+    all_filenames = []
+    for fil in first.filenames:
+        all_filenames.append(fil)
+    for fil in second.filenames:
+        all_filenames.append(fil)
+
+    #make the new VideoClips, does not support saving audio information
+    vclips = VideoClips(all_filenames)
+
+    return vclips
+
 class VideoClips():
     """Load multiple videos and write out relevant clips/audio
 
