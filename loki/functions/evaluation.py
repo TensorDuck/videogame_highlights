@@ -17,9 +17,9 @@ def get_confusion_matrix(actual, predicted):
         Contains the cm (confusion matrix), accuracy, precision and
         recall.
     """
-    cm = skmet.confusion_matrix(test_values, results)
+    cm = skmet.confusion_matrix(actual, predicted)
 
-    accuracy = (cm[0,0] + cm[1,1]) / len(test_values)
+    accuracy = (cm[0,0] + cm[1,1]) / len(actual)
 
     precision = cm[1,1] / (cm[0,1] + cm[1,1]) # true positives over false positives and true positives
     recall = cm[1,1] / (cm[1,0] + cm[1,1]) # True positives over false negatives and true positives
