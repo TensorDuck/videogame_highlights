@@ -4,7 +4,7 @@
 # But no these files
 !.gitignore
 !*.py
-!README.md
+!*.md
 !build/add_path.sh
 
 # ... even if they are in subdirectories
