@@ -40,8 +40,25 @@ def get_embeddings(x, sr):
     return resdict['embedding']
 
 class NeuralNetworkClassifier():
-    def __init__():
-        pass
+    """Initialize a NN for learning on sound embeddings
+
+    Assume the embeddings use a 10x128 dimension for training and
+    inference. This means that the input data is a 10-second long
+    audio clip.
+
+    Keyword Arguments:
+    ------------------
+    save_dir -- str -- default='./nn_model':
+        Directory to save the model's learned parameters and log files.
+    """
+
+    def __init__(self, save_dir="./nn_model"):
+        self.model = Sequential()
+        self.model.add(Dense(1, input_shape=(10, 128), activation="sigmoid"))
+        self.model.compile(optimizer='AdaDelta', loss='binary_crossentropy', metrics=['accuracy'])
+
+        self.tb_callback = keras.callbacks.TensorBoard(log_dir=save_dir, histogram_freq=0, write_graph=True, write_images=False)
+
 
     def train(self, training_x, training_y):
         pass
