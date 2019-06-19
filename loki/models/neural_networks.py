@@ -59,9 +59,20 @@ class NeuralNetworkClassifier():
 
         self.tb_callback = keras.callbacks.TensorBoard(log_dir=save_dir, histogram_freq=0, write_graph=True, write_images=False)
 
+    def train(self, training_x, training_y, validation_x, validation_y):
+        x_train = []
+        x_valid = []
 
-    def train(self, training_x, training_y):
-        pass
+        for thing in training_x:
+            x_train.append(get_embeddings(thing, 44100))
+        for thing in training_y:
+            x_valid.append(get_embeddings(thing,44100))
+        self.model.fit(x_train, training_y, batch_size=10, epochs=200,
+          verbose=0, validation_data=(x_valid, validation_y),callbacks=[tb_callback])
+        score = model.evaluate(x_valid, validation_y, verbose=0)
+        print('Test loss:', score[0])
+        print('Test accuracy:', score[1])
+
 
     def infer(self, test_x):
         pass
