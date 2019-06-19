@@ -2,6 +2,10 @@
 import tensorflow as tf
 from vggish_tensorflow import CreateVGGishNetwork, EmbeddingsFromVGGish
 import numpy as np
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+
 
 def get_embeddings(x, sr):
     """Get the sound embeddings from vgg-ish
@@ -34,3 +38,13 @@ def get_embeddings(x, sr):
     sess.close()
 
     return resdict['embedding']
+
+class NeuralNetworkClassifier():
+    def __init__():
+        pass
+
+    def train(self, training_x, training_y):
+        pass
+
+    def infer(self, test_x):
+        pass
