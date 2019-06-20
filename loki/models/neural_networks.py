@@ -40,6 +40,23 @@ def get_embeddings(x_list, sr):
     sess.close()
 
     return resdict['embedding']
+class SimpleNetwork(nn.Module):
+    """A pytorch implementation of a final classification layer
+
+    This is a simple model where a single linear unit is added after the
+    embeddings layer from tensorflow. A sigmoid follows to infer the
+    binary class.
+    """
+    def __init__(self):
+        super(SimpleNetwork, self).__init__()
+        self.fc1 = nn.Linear(128,1)
+        self.fc2 = nn.Sigmoid()
+
+    def forward(self, x):
+        y = self.fc1(x)
+        y = self.fc2(y)
+        return y
+
 
 class NeuralNetworkClassifier():
     """Initialize a NN for learning on sound embeddings
