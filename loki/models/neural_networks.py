@@ -155,8 +155,15 @@ class NeuralNetworkClassifier():
 
     def infer(self, test_x):
         """Infer the classes on an inputted audio waveform. """
-        x_test, junk = stack_embeddings_and_targets(get_embeddings(test_x, 44100))
+        embeddings_x = get_embeddings(test_x, 44100)
+        inferred = []
+        for x in embeddings_x:
+            y = self.model(torch.FloatTensor(x))
+            y_array = y.detach().numpy()
+            avg = y_array.mean()
+            if avg > 0.5:
+                inferred.append(1)
+            else:
+                inferred.append(0)
 
-        y = self.model(torch.FloatTensor(x_test))
-
-        return y
+        return np.array(inferred)
