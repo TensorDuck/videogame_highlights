@@ -23,23 +23,28 @@ def get_embeddings(x_list, sr):
 
     Arguments:
     ----------
-    x -- numpy.ndarray:
-        The trace of the sound wave (mono-channel)
+    x_list -- list[numpy.ndarray]:
+        List of traces of the sound wave (mono-channel)
     sr -- int:
         The sampling rate for the audio clip in Hz.
     """
-    checkpoint_path = 'vggish_tensorflow/vggish_model.ckpt'
+    checkpoint_path = os.environ["SOUNDEMBEDDINGS"]
 
+    print(checkpoint_path)
+    all_embeddings = []
     tf.reset_default_graph()
     sess = tf.Session()
 
-
     vgg = CreateVGGishNetwork(sess, checkpoint_path)
-    resdict = EmbeddingsFromVGGish(sess, vgg, x, sr)
+
+    for x in x_list:
+        resdict = EmbeddingsFromVGGish(sess, vgg, x, sr)
+        all_embeddings.append(resdict['embedding'])
 
     sess.close()
 
-    return resdict['embedding']
+    return all_embeddings
+
 class SimpleNetwork(nn.Module):
     """A pytorch implementation of a final classification layer
 
