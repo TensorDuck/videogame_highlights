@@ -130,8 +130,6 @@ class NeuralNetworkClassifier():
         """
         x_train, y_train = stack_embeddings_and_targets(get_embeddings(training_x, 44100), targets=training_y)
 
-        print(np.shape(x_train))
-
         optimizer = optim.SGD(self.model.parameters(), lr=0.01, momentum=0.5)
         criterion = nn.MSELoss()
         for epoch in range(n_epochs):
