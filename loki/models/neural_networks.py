@@ -62,6 +62,38 @@ class SimpleNetwork(nn.Module):
         y = self.fc2(y)
         return y
 
+def stack_embeddings_and_targets(embeddings, targets=None):
+    """Stack multiple embeddings along the zeroth axis
+
+    Arguments:
+    ----------
+    embeddings -- list(np.array):
+        A list of length L, with n_lx128 dimensional embeddings.
+
+    Keyword Arguments:
+    ------------------
+    targets -- np.ndarray -- default=None:
+        An array of target values. If given, will also stack and
+        multiply the number of targets by n.
+
+    Return:
+    -------
+    x -- np.ndarray:
+        A Nx128 dimensional array where N = SUM_l(n_l)
+    y -- np.ndarray:
+        A N-length array.
+    """
+    x = np.zeros((0,128))
+    y = []
+    if targets is None:
+        targets = np.zeros(len(embeddings))
+    for tar,embed in zip(targets, embeddings):
+        n_frames = np.shape(embed)[0]
+        x = np.append(x, embed, axis=0)
+        for i in range(n_frames):
+            y.append(tar)
+
+    return x,y
 
 class NeuralNetworkClassifier():
     """Initialize a NN for learning on sound embeddings
