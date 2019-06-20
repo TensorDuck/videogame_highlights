@@ -61,9 +61,11 @@ class SimpleNetwork(nn.Module):
 class NeuralNetworkClassifier():
     """Initialize a NN for learning on sound embeddings
 
-    Assume the embeddings use a 10x128 dimension for training and
-    inference. This means that the input data is a 10-second long
-    audio clip.
+    When training on clips longer than 1-second, their outputs are
+    stacked such that you have an Nx128 dimensional array, where:
+    N = SUM_i(clip_time_i)
+    For the clip_time in seconds. It then trains 128-params to classify
+    a scene as interesting or not interesting.
 
     Keyword Arguments:
     ------------------
@@ -72,26 +74,46 @@ class NeuralNetworkClassifier():
     """
 
     def __init__(self, save_dir="./nn_model"):
-        self.model = Sequential()
-        self.model.add(Dense(1, input_shape=(10, 128), activation="sigmoid"))
-        self.model.compile(optimizer='AdaDelta', loss='binary_crossentropy', metrics=['accuracy'])
+        self.model = SimpleNetwork()
 
-        self.tb_callback = keras.callbacks.TensorBoard(log_dir=save_dir, histogram_freq=0, write_graph=True, write_images=False)
+    def train(self, training_x, training_y, n_epochs=100):
+        """Train the neural network
 
-    def train(self, training_x, training_y, validation_x, validation_y):
-        x_train = []
-        x_valid = []
+        Arguments:
+        ----------
+        training_x -- list(np.ndarray):
+            List of raw mono-audio traces sampled at 44.1kHz.
+        training_y -- np.ndarray:
+            Corresponding list of target classes for each audio pattern.
 
-        for thing in training_x:
-            x_train.append(get_embeddings(thing, 44100))
-        for thing in training_y:
-            x_valid.append(get_embeddings(thing,44100))
-        self.model.fit(x_train, training_y, batch_size=10, epochs=200,
-          verbose=0, validation_data=(x_valid, validation_y),callbacks=[tb_callback])
-        score = model.evaluate(x_valid, validation_y, verbose=0)
-        print('Test loss:', score[0])
-        print('Test accuracy:', score[1])
+        Keyword Arguments:
+        ------------------
+        n_epochs -- int -- default=100:
+            Number of training epochs to run.
+        """
+        x_train, y_train = stack_embeddings_and_targets(get_embeddings(training_x, 44100), targets=training_y)
 
+        print(np.shape(x_train))
+
+        optimizer = optim.SGD(self.model.parameters(), lr=0.01, momentum=0.5)
+        criterion = nn.MSELoss()
+        for epoch in range(n_epochs):
+            for i in range(len(x_train)):
+                X = Variable(torch.FloatTensor([x_train[i]]), requires_grad=True)
+                Y = Variable(torch.FloatTensor([y_train[i]]))
+                optimizer.zero_grad()
+                outputs = self.model(X)
+                loss = criterion(outputs, Y)
+                loss.backward()
+                optimizer.step()
+
+            if epoch % 10 == 0:
+                print(f"Epoch {epoch} Loss: {loss}")
 
     def infer(self, test_x):
-        pass
+        """Infer the classes on an inputted audio waveform. """
+        x_test, junk = stack_embeddings_and_targets(get_embeddings(test_x, 44100))
+
+        y = self.model(torch.FloatTensor(x_test))
+
+        return y
