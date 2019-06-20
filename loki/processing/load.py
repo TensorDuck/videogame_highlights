@@ -1,5 +1,6 @@
 """Class and methods for handling loading of video files"""
 from moviepy.editor import VideoFileClip
+import librosa
 
 def append_clips(first, second):
     """Append two different VideoClips objects
@@ -94,7 +95,7 @@ class VideoClips():
             clip = this_vid.subclip(stamp[1], stamp[2])
             clip.write_videofile(write_names[i_count], fps=write_fps)
 
-    def compute_audio_waveform(self, freq=44100):
+    def compute_audio_waveform(self, freq=44100, mono=False):
         """Compute the binaural audio time series
 
         For each video stored, extract the binaural audio. This audio
@@ -105,6 +106,8 @@ class VideoClips():
         ------------------
         freq -- int -- default=44100:
             Frequency of the computed sound in Hz. Default is 44.1 kHz.
+        mono -- bool -- default=False:
+            If True, return mono-channel instead of binaural audio.
 
         Return:
         -------
@@ -118,6 +121,10 @@ class VideoClips():
             clip = VideoFileClip(fname)
             audio = clip.audio
             wav = audio.to_soundarray(fps=freq)
+            #convert to mono-channel
+            if mono:
+                #librosa requires shape (2,N), moviepy gives shape (N,2)
+                wav = librosa.to_mono(wav.transpose())
             self.audios.append(wav)
 
         return self.audios
