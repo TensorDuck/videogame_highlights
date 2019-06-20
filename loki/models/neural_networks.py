@@ -1,6 +1,6 @@
 """This package contains methods for using neural networks"""
 import tensorflow as tf
-from vggish_tensorflow import CreateVGGishNetwork, EmbeddingsFromVGGish
+from .vggish_tensorflow import CreateVGGishNetwork, EmbeddingsFromVGGish
 import numpy as np
 import keras
 from keras.models import Sequential
