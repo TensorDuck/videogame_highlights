@@ -141,17 +141,19 @@ class NeuralNetworkClassifier():
         criterion = nn.MSELoss()
         for epoch in range(n_epochs):
             random_indices = np.random.choice(all_indices, size=batch_size, replace=False)
+            total_loss = 0
             for i in random_indices:
                 X = Variable(torch.FloatTensor([x_train[i]]), requires_grad=True)
                 Y = Variable(torch.FloatTensor([y_train[i]]))
                 optimizer.zero_grad()
                 outputs = self.model(X)
                 loss = criterion(outputs, Y)
+                total_loss += loss.item()
                 loss.backward()
                 optimizer.step()
 
             if epoch % 10 == 0:
-                print(f"Epoch {epoch} Loss: {loss}")
+                print(f"Epoch {epoch} Loss: {total_loss}")
 
     def infer(self, test_x):
         """Infer the classes on an inputted audio waveform. """
