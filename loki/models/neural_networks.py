@@ -113,7 +113,7 @@ class NeuralNetworkClassifier():
     def __init__(self, save_dir="./nn_model"):
         self.model = SimpleNetwork()
 
-    def train(self, training_x, training_y, n_epochs=100):
+    def train(self, training_x, training_y, n_epochs=100, batch_size=None):
         """Train the neural network
 
         Arguments:
@@ -127,13 +127,21 @@ class NeuralNetworkClassifier():
         ------------------
         n_epochs -- int -- default=100:
             Number of training epochs to run.
+        batch_size -- int -- default=all:
+            Batch size of each training epoch. Default is all training
+            data at each epoch.
         """
         x_train, y_train = stack_embeddings_and_targets(get_embeddings(training_x, 44100), targets=training_y)
+
+        if batch_size is None: #set default batch-size
+            batch_size = len(x_train)
+        all_indices = np.arange(len(x_train)).astype(int)
 
         optimizer = optim.SGD(self.model.parameters(), lr=0.01, momentum=0.5)
         criterion = nn.MSELoss()
         for epoch in range(n_epochs):
-            for i in range(len(x_train)):
+            random_indices = np.random.choice(all_indices, size=batch_size, replace=False)
+            for i in random_indices:
                 X = Variable(torch.FloatTensor([x_train[i]]), requires_grad=True)
                 Y = Variable(torch.FloatTensor([y_train[i]]))
                 optimizer.zero_grad()
