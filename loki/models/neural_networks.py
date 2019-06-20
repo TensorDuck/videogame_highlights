@@ -1,8 +1,8 @@
 """This package contains methods for using neural networks"""
-import tensorflow as tf
-from .vggish_tensorflow import CreateVGGishNetwork, EmbeddingsFromVGGish
 import numpy as np
 import os
+import tensorflow as tf
+from .vggish_tensorflow import CreateVGGishNetwork, EmbeddingsFromVGGish
 import torch
 from torch.autograd import Variable
 import torch.optim as optim
