@@ -2,12 +2,14 @@
 import tensorflow as tf
 from .vggish_tensorflow import CreateVGGishNetwork, EmbeddingsFromVGGish
 import numpy as np
-import keras
-from keras.models import Sequential
-from keras.layers import Dense
+import os
+import torch
+from torch.autograd import Variable
+import torch.optim as optim
+import torch.nn as nn
+import torch.nn.functional as F
 
-
-def get_embeddings(x, sr):
+def get_embeddings(x_list, sr):
     """Get the sound embeddings from vgg-ish
 
     Use the pre-trained vggish network from TensorFlow in order to
