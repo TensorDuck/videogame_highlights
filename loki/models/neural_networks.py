@@ -110,8 +110,14 @@ class NeuralNetworkClassifier():
         Directory to save the model's learned parameters and log files.
     """
 
-    def __init__(self, save_dir="./nn_model"):
+    def __init__(self):
         self.model = SimpleNetwork()
+
+    def save(self, save_dir="./nn_model"):
+        torch.save(self.model, save_dir)
+
+    def load(self, target):
+        self.model.load_state_dict(torch.load(target))
 
     def train(self, training_x, training_y, n_epochs=100, batch_size=None):
         """Train the neural network
