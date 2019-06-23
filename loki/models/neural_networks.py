@@ -175,3 +175,12 @@ class NeuralNetworkClassifier():
                 inferred.append(0)
 
         return np.array(inferred)
+
+    def get_trace(self, test_x):
+        embeddings_x = get_embeddings(test_x, 44100)
+        traces = []
+        for x in embeddings_x:
+            y = self.model(torch.FloatTensor(x))
+            y_array = y.detach().numpy()
+            traces.append(y_array)
+        return traces
