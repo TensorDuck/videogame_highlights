@@ -94,6 +94,7 @@ class VideoClips():
             this_vid = VideoFileClip(self.filenames[0])
             clip = this_vid.subclip(stamp[1], stamp[2])
             clip.write_videofile(write_names[i_count], fps=write_fps)
+            clip.close()
 
     def compute_audio_waveform(self, freq=44100, mono=False):
         """Compute the binaural audio time series
