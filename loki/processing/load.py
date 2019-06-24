@@ -116,15 +116,18 @@ class VideoClips():
         """
 
         self.audio_freq = 44100
-        self.audios = []
-        for fname in self.filenames:
-            clip = VideoFileClip(fname)
-            audio = clip.audio
-            wav = audio.to_soundarray(fps=freq)
-            #convert to mono-channel
-            if mono:
-                #librosa requires shape (2,N), moviepy gives shape (N,2)
-                wav = librosa.to_mono(wav.transpose())
-            self.audios.append(wav)
+        #only extract audio once (saves time)
+        if self.audios is None:
+            self.audios = []
+            for fname in self.filenames:
+                clip = VideoFileClip(fname)
+                audio = clip.audio
+                wav = audio.to_soundarray(fps=freq)
+                clip.close()
+                #convert to mono-channel
+                if mono:
+                    #librosa requires shape (2,N), moviepy gives shape (N,2)
+                    wav = librosa.to_mono(wav.transpose())
+                self.audios.append(wav)
 
         return self.audios
