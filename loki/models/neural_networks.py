@@ -81,7 +81,7 @@ def stack_embeddings_and_targets(embeddings, targets=None):
     x -- np.ndarray:
         A Nx128 dimensional array where N = SUM_l(n_l)
     y -- np.ndarray:
-        A N-length array.
+        A N-length array representing the stacked targets.
     """
     x = np.zeros((0,128))
     y = []
@@ -92,6 +92,7 @@ def stack_embeddings_and_targets(embeddings, targets=None):
         x = np.append(x, embed, axis=0)
         for i in range(n_frames):
             y.append(tar)
+    y = np.array(y)
 
     return x,y
 
