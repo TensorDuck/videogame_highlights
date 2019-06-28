@@ -115,7 +115,7 @@ class NeuralNetworkClassifier():
         self.model = SimpleNetwork()
 
     def save(self, save_dir="./nn_model"):
-        torch.save(self.model, save_dir)
+        torch.save(self.model.state_dict(), save_dir)
 
     def load(self, target):
         self.model.load_state_dict(torch.load(target))
