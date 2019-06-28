@@ -191,8 +191,16 @@ class NeuralNetworkClassifier():
     def get_trace(self, test_x):
         embeddings_x = get_embeddings(test_x, 44100)
         traces = []
+        x_traces = []
         for x in embeddings_x:
             y = self.model(torch.FloatTensor(x))
             y_array = y.detach().numpy()
-            traces.append(y_array)
-        return traces
+            traces.append(y_array[:,0])
+
+            #output the time stamps of each data point
+            #time stamp is given at the center of each "bin"
+            max_time = len(y_array) * 0.96
+            time_stamps = np.arange(0.48, max_time, 0.96)
+            x_traces.append(time_stamps)
+
+        return x_traces, traces
