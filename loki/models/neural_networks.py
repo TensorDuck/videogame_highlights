@@ -120,7 +120,7 @@ class NeuralNetworkClassifier():
     def load(self, target):
         self.model.load_state_dict(torch.load(target))
 
-    def train(self, training_x, training_y, n_epochs=100, batch_size=None):
+    def train(self, training_x, training_y, n_epochs=100, batch_size=None, class_weights=None):
         """Train the neural network
 
         Arguments:
@@ -137,17 +137,28 @@ class NeuralNetworkClassifier():
         batch_size -- int -- default=all:
             Batch size of each training epoch. Default is all training
             data at each epoch.
+        class_weights -- np.ndarray -- default=None:
+            Relative weight of each class. This weight affects the
+            probability of picking each class when selecting the batch.
         """
         x_train, y_train = stack_embeddings_and_targets(get_embeddings(training_x, 44100), targets=training_y)
 
         if batch_size is None: #set default batch-size
             batch_size = len(x_train)
+        if class_weights is None:
+            class_weights = np.ones(2)
+
+        pmatrix = np.zeros(len(y_train))
+        pmatrix[np.where(y_train == 0)] = class_weights[0]
+        pmatrix[np.where(y_train == 1)] = class_weights[1]
+        pmatrix /= np.sum(pmatrix)
+
         all_indices = np.arange(len(x_train)).astype(int)
 
         optimizer = optim.SGD(self.model.parameters(), lr=0.01, momentum=0.5)
         criterion = nn.MSELoss()
         for epoch in range(n_epochs):
-            random_indices = np.random.choice(all_indices, size=batch_size, replace=False)
+            random_indices = np.random.choice(all_indices, size=batch_size, replace=False, p=pmatrix)
             total_loss = 0
             for i in random_indices:
                 X = Variable(torch.FloatTensor([x_train[i]]), requires_grad=True)
