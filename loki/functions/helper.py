@@ -101,11 +101,7 @@ def _train_volume_classifier(train_clips, train_targets):
 
     Arguments:
     ----------
-    train_clips -- loki.VideoClips:
-        The loaded video clips to use for training.
-    train_targets -- np.ndarray:
-        An array with the same number of elements as train_clips
-        classifying each clip as either interesting (1) or boring (0).
+    See loki.functions.helper.train_classifier().
 
     Return:
     -------
