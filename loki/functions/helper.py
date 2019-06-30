@@ -125,7 +125,7 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
     half_clip = clip_length * 0.5
     best_clip = [best_time - half_clip, best_time +half_clip]
 
-    return {"best_clip":best_clip, "x_avg":x_avg, "y_avg":y_avg}
+    return {"best_clip":best_clip, "x_trace":x_trace, "y_trace":y_trace}
 
 def train_classifier(train_clips, train_targets, test_clips=None, test_targets=None, classifier="nn", n_epochs=100, batch_size=None, class_weights=None):
     """Get a trained classifier for audio data
