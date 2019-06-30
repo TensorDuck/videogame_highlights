@@ -95,6 +95,12 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
     ------------------
     nn_model -- str -- nn_model:
         Location of the loki.NeuralNetworkClassifier checkpoint file.
+
+    Return:
+    -------
+    -- dict:
+        Return a dictionary containing the best_clip, x_trace, and
+        y_trace.
     """
     #0.96 is the length of time VGGish processes as a single embedding
     clip_size = int(np.floor(clip_length / 0.96))
