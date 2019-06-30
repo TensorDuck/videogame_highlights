@@ -121,15 +121,17 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
     #find the most interesting segment
     best_interest = 0
     best_time = 0
-    for x,y in zip(x_avg, y_avg):
+    best_file = None
+    for i,(x,y) in enumerate(zip(x_avg, y_avg)):
         if np.max(y) > best_interest:
             #found a better clip
             best_interest = np.max(y)
             #find time of peak interest. If multiple, keep only first
             best_time = x[np.where(y == best_interest)][0]
+            best_file = video_files[i]
 
     half_clip = clip_length * 0.5
-    best_clip = [best_time - half_clip, best_time +half_clip]
+    best_clip = [best_file, best_time - half_clip, best_time +half_clip]
 
     return {"best_clip":best_clip, "x_trace":x_trace, "y_trace":y_trace}
 
