@@ -1,5 +1,7 @@
 """Contains helper functions for loading/training/evaluation"""
 import os
+import numpy as np
+
 from .. import processing
 from .. import models
 from . import evaluation
@@ -73,6 +75,36 @@ def average_over_window(data, n_average):
     new_data /= n_average
 
     return new_data
+
+def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
+    #0.96 is the length of time VGGish processes as a single embedding
+    clip_size = int(np.floor(clip_length / 0.96))
+    nnclass = loki.NeuralNetworkClassifier()
+    nnclass.load(nn_checkpoint)
+    vclips = loki.VideoClips(video_files)
+    big_audio = vclips.compute_audio_waveform()
+
+    x_trace, y_trace = nnclass.get_trace(big_audio)
+
+    x_avg = []
+    y_avg = []
+    for x,y in zip(x_trace,y_trace):
+        x_avg.append(average_window(x, clip_size))
+        y_avg.append(average_window(y, clip_size))
+
+    best_interest = 0
+    best_time = 0
+    for x,y in zip(x_avg, y_avg):
+        if np.max(y) > best_interest:
+            #found a better clip
+            best_interest = np.max(y)
+            #find time of peak interest. If multiple, keep only first
+            best_time = x[np.where(y == best_interest)][0]
+
+    half_clip = clip_length * 0.5
+    best_clip = [best_time - half_clip, best_time +half_clip]
+
+    return {"best_clip":best_clip, "x_avg":x_avg, "y_avg":y_avg}
 
 def train_classifier(train_clips, train_targets, test_clips=None, test_targets=None, classifier="nn", n_epochs=100, batch_size=None, class_weights=None):
     """Get a trained classifier for audio data
