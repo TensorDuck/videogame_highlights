@@ -107,3 +107,22 @@ def _train_volume_classifier(train_clips, train_targets):
     vclassifier.train(audio_data, train_targets)
 
     return vclassifier
+
+def _train_nn_classifier(train_clips, train_targets, n_epochs=100, batch_size=None, class_weights=None):
+    """Get a trained neural network classifier
+
+    Arguments:
+    ----------
+    See loki.functions.helper.train_classifier().
+
+    Return:
+    -------
+    nclassifier -- loki.NeuralNetworkClassifier:
+        A trained neural network classifier.
+    """
+    nclassifier = models.NeuralNetworkClassifier()
+
+    raw_audio = train_clips.compute_audio_waveform(mono=True)
+    nclassifier.train(raw_audio, train_targets, n_epochs="n_epochs", class_weights="class_weights", batch_size="batch_size")
+
+    return nclassifier
