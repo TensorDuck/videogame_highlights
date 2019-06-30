@@ -77,6 +77,25 @@ def average_over_window(data, n_average):
     return new_data
 
 def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
+    """Find the best clip in a set of videos of specified duration
+
+    Search over every video_file and compute a windowed average of the
+    interest level every second. The clip section with the largest
+    average interest is then returned, as well as the original
+    non-averaged trace of interest level for each inputted video file.
+
+    Arguments:
+    ----------
+    video_files -- list[str]:
+        List of video files to calculcate interest levels for.
+    clip_length -- float:
+        Length of the desired highlight clip in seconds.
+
+    Keyword Arguments:
+    ------------------
+    nn_model -- str -- nn_model:
+        Location of the loki.NeuralNetworkClassifier checkpoint file.
+    """
     #0.96 is the length of time VGGish processes as a single embedding
     clip_size = int(np.floor(clip_length / 0.96))
     nnclass = loki.NeuralNetworkClassifier()
@@ -86,12 +105,14 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
 
     x_trace, y_trace = nnclass.get_trace(big_audio)
 
+    #save the average interest level over each clip in a windowed avg
     x_avg = []
     y_avg = []
     for x,y in zip(x_trace,y_trace):
         x_avg.append(average_window(x, clip_size))
         y_avg.append(average_window(y, clip_size))
 
+    #find the most interesting segment
     best_interest = 0
     best_time = 0
     for x,y in zip(x_avg, y_avg):
