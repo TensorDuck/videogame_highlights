@@ -40,6 +40,40 @@ def load_clips_from_dir(target_dir=None):
 
     return clips
 
+def average_over_window(data, n_average):
+    """Computer a sliding window average over data
+
+    Given a window size in indices, compute the average value of data
+    over that window sliding by one index.
+
+    Arguments:
+    ----------
+    data -- np.ndarray:
+        1-D array of length N to compute averages over.
+    n_average -- int:
+        Size of the window.
+
+    Return:
+    -------
+    new_data -- np.ndarray:
+        1-D array of length N-n_average. Each index represents the
+        average over n_average consecutive elements.
+
+    Example:
+    --------
+    Given data = [0, 1, 2, 3, 4]
+    n_average = 2
+    Then the average trace over a window of 2 is:
+    [0.5, 1.5, 2.5, 3.5]
+    """
+
+    new_data = np.copy(data)[:-n_average]
+    for i in range(1, n_average):
+        new_data += data[i:-(n_average-i)]
+    new_data /= n_average
+
+    return new_data
+
 def train_classifier(train_clips, train_targets, test_clips=None, test_targets=None, classifier="nn", n_epochs=100, batch_size=None, class_weights=None):
     """Get a trained classifier for audio data
 
