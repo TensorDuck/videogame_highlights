@@ -50,7 +50,8 @@ class SimpleNetwork(nn.Module):
 
     This is a simple model where a single linear unit is added after the
     embeddings layer from tensorflow. A sigmoid follows to infer the
-    binary class.
+    binary class. The embeddings from VGGish are a 128-Dimensional
+    vector.
     """
     def __init__(self):
         super(SimpleNetwork, self).__init__()
@@ -115,13 +116,22 @@ class NeuralNetworkClassifier():
         self.model = SimpleNetwork()
 
     def save(self, save_dir="./nn_model"):
+        """Save the pytorch model"""
         torch.save(self.model.state_dict(), save_dir)
 
     def load(self, target):
+        """Load the pytorch model"""
         self.model.load_state_dict(torch.load(target))
 
     def train(self, training_x, training_y, n_epochs=100, batch_size=None, class_weights=None):
         """Train the neural network
+
+        Training is done on a per-second basis, not on whole clips.
+        Thus, clips are broken up into their constitutent seonds in this
+        method. The batch_size is then effectively the number of seconds
+        of audio data to trian on in each cycle. i.e. 10 clips of 10
+        seconds each with a batch_size=20 means you train on 20% of the
+        training_data in each epoch.
 
         Arguments:
         ----------
@@ -145,21 +155,28 @@ class NeuralNetworkClassifier():
 
         if batch_size is None: #set default batch-size
             batch_size = len(x_train)
-        if class_weights is None:
+        if class_weights is None: #set default class_weights
             class_weights = np.ones(2)
 
+        #pmatrix is the probability of selecting each class
+        #pmatrix is based on the class_weights
         pmatrix = np.zeros(len(y_train))
         pmatrix[np.where(y_train == 0)] = class_weights[0]
         pmatrix[np.where(y_train == 1)] = class_weights[1]
         pmatrix /= np.sum(pmatrix)
 
+        #all_indices is used for np.random.choice later
         all_indices = np.arange(len(x_train)).astype(int)
 
+        #set pytroch optimizer and criterion
         optimizer = optim.SGD(self.model.parameters(), lr=0.01, momentum=0.5)
         criterion = nn.MSELoss()
+        #Begin the training epochs
         for epoch in range(n_epochs):
+            #select random training indices for each batch
             random_indices = np.random.choice(all_indices, size=batch_size, replace=False, p=pmatrix)
             total_loss = 0
+            #perform the pytorch training
             for i in random_indices:
                 X = Variable(torch.FloatTensor([x_train[i]]), requires_grad=True)
                 Y = Variable(torch.FloatTensor([y_train[i]]))
@@ -170,18 +187,33 @@ class NeuralNetworkClassifier():
                 loss.backward()
                 optimizer.step()
 
+            #print out the total loss every 10 epochs
             if epoch % 10 == 0:
                 print(f"Epoch {epoch} Loss: {total_loss}")
 
     def infer(self, test_x):
-        """Infer the classes on an inputted audio waveform. """
+        """Infer the classes on inputted audio waveform
+
+        A clip is interesting if the average interest level over the
+        whole clip is greater than a threshold of 0.5.
+
+        Arguments:
+        ----------
+        test_x -- list[np.ndarray]:
+            List of raw audio (mono-channel) waveforms.
+
+        Return:
+        -------
+        inferred -- np.ndarray:
+            Return the inferred classes.
+        """
         embeddings_x = get_embeddings(test_x, 44100)
         inferred = []
         for x in embeddings_x:
             y = self.model(torch.FloatTensor(x))
             y_array = y.detach().numpy()
             avg = y_array.mean()
-            if avg > 0.5:
+            if avg > 0.5: #threshold is set to 0.5
                 inferred.append(1)
             else:
                 inferred.append(0)
@@ -189,10 +221,30 @@ class NeuralNetworkClassifier():
         return np.array(inferred)
 
     def get_trace(self, test_x):
+        """Get a trace of the interest level every 0.96 seconds
+
+        Inputted audio waveforms are binned to every 0.96 seconds and
+        then the interest level is inferred for each bin.
+
+        Arguments:
+        ----------
+        test_x -- list[np.ndarray]:
+            List of N raw audio (mono-channel) waveforms.
+
+        Return:
+        -------
+        x_traces -- list[np.ndarray]:
+            List of N arrays giving the time at the center of every
+            0.96s long bin that the interest score was inferred over.
+        traces -- list[np.ndarray]:
+            List of N arrays giving the interest level of the
+            corresponding time bin.
+        """
         embeddings_x = get_embeddings(test_x, 44100)
         traces = []
         x_traces = []
         for x in embeddings_x:
+            #perform the inference over the whole audio waveform at once
             y = self.model(torch.FloatTensor(x))
             y_array = y.detach().numpy()
             traces.append(y_array[:,0])
