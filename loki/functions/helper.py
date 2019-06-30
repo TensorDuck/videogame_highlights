@@ -87,7 +87,7 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
     Arguments:
     ----------
     video_files -- list[str]:
-        List of video files to calculcate interest levels for.
+        List of N video files to calculcate interest levels for.
     clip_length -- float:
         Length of the desired highlight clip in seconds.
 
@@ -98,9 +98,21 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
 
     Return:
     -------
+    best_clip -- list:
+
     -- dict:
         Return a dictionary containing the best_clip, x_trace, and
         y_trace.
+        best_clip -- list:
+            Contains the best clip section. The first element is the
+            video file containing the best clip. The second and third
+            element is the start and stop time respectively.
+        x_trace -- list[np.ndarray]:
+            List of N arrays giving the times for the center of each
+            averaging window.
+        y_trace -- list[np.ndarray]:
+            List of N arrays giving the average interst level over each
+            window.
     """
     #0.96 is the length of time VGGish processes as a single embedding
     clip_size = int(np.floor(clip_length / 0.96))
