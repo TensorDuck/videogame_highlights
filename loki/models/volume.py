@@ -18,8 +18,6 @@ class VolumeClassifier():
         Scenes with average volume above volume_cutoff are classified as
         interesting. Those less than or equal to volume_cutoff are
         classified as uninteresting.
-
-
     """
 
     def __init__(self):
