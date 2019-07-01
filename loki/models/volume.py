@@ -64,7 +64,10 @@ class VolumeClassifier():
 
         Train the volume classifier (currently a binary classifier).
         Default loss function is the hamming loss which, for a binary
-        classifier, is equivalent to 1-accuracy.
+        classifier, is equivalent to accuracy.
+        The training here is simply finding the threshold that maximizes
+        the accuracy. It's not technically training but the method is
+        named such for consistency.
 
         Arguments
         ---------
