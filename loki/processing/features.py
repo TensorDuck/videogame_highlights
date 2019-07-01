@@ -26,10 +26,10 @@ def compute_decibels(data, freq=44100):
     decibels = []
 
     all_audio = data.compute_audio_waveform(freq=freq)
-    
+
     for binaural in all_audio:
         power = binaural ** 2 # square for the power
-        #sum up binaural audio channel
+        #sum up dual-channel audio if the audio is dual-channel
         if power.ndim == 2:
             power = np.sum(power, axis=1)
 
