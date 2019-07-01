@@ -17,8 +17,12 @@ def compute_decibels(data, freq=44100):
     ------------------
     freq -- int -- default=44100
         Frequency at which to extract the audio.
-    """
 
+    Return:
+    -------
+    decibels -- list[np.ndarray]:
+        The loudness over time of each inputted clip.
+    """
     decibels = []
 
     if data.audios is None:
