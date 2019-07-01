@@ -173,6 +173,11 @@ class VolumeModel():
         loudest moments. Return the video index and time index
         corresponding to the overall loudest portion.
 
+        Note, the inputted loudness are not expected to be the same
+        length as the length of videos would vary a great deal. Assuming
+        every video is atleast longer than self.search_length, then the
+        outputted loudest segments would be of standard length.
+
         Arguments:
         ----------
         loudness -- list[np.ndarray(float)]:
