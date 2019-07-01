@@ -116,9 +116,9 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
     """
     #0.96 is the length of time VGGish processes as a single embedding
     clip_size = int(np.floor(clip_length / 0.96))
-    nnclass = loki.NeuralNetworkClassifier()
+    nnclass = models.NeuralNetworkClassifier()
     nnclass.load(nn_checkpoint)
-    vclips = loki.VideoClips(video_files)
+    vclips = processing.VideoClips(video_files)
     big_audio = vclips.compute_audio_waveform()
 
     x_trace, y_trace = nnclass.get_trace(big_audio)
