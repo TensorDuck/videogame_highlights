@@ -5,23 +5,6 @@ import sklearn.metrics as skmet
 
 from .util import sort_scores_and_remove_overlap
 
-def compute_average_volume(audioclip):
-    """Return average volume in an audioclip
-
-    Arguments:
-    ----------
-    audioclip -- np.ndarray:
-        A trace of the volume.
-
-    Return:
-    -------
-    avg_loudness -- float:
-        Average value of the volume over the whole trace.
-    """
-    avg_loudness = np.sum(audioclip) / float(len(audioclip))
-
-    return avg_loudness
-
 class VolumeClassifier():
     """A classifier that classifiers interesting scenes based on volume
 
@@ -87,7 +70,7 @@ class VolumeClassifier():
 
         Arguments
         ---------
-        training_x -- np.ndarray or list:
+        training_x -- list[np.ndarray]:
             The volume (in decibels) of the training data. Of length N.
         training_y -- np.ndarray or list:
             The corresponding classes of the training data. Also of
@@ -96,7 +79,7 @@ class VolumeClassifier():
         """
         average_loudness = []
         for audioclip in training_x:
-            average_loudness.append(compute_average_volume(audioclip))
+            average_loudness.append(audioclip.mean())
         average_loudness = np.array(average_loudness)
 
         best_loss = 1 # hamming loss goes from 0 - 1
@@ -129,7 +112,7 @@ class VolumeClassifier():
 
         Arguments:
         ----------
-        test_x -- np.ndarray or list:
+        test_x -- list[np.ndarray]:
             The volume (in decibels) of the test data.
 
         Return:
@@ -139,7 +122,7 @@ class VolumeClassifier():
          """
         classified = []
         for audioclip in test_x:
-            avg_volume = compute_average_volume(audioclip)
+            avg_volume = audioclip.mean()
             if avg_volume > self.volume_cutoff:
                 classified.append(1)
             else:
