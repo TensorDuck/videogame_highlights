@@ -30,7 +30,6 @@ def get_embeddings(x_list, sr):
     """
     checkpoint_path = os.environ["SOUNDEMBEDDINGS"]
 
-    print(checkpoint_path)
     all_embeddings = []
     tf.reset_default_graph()
     sess = tf.Session()
