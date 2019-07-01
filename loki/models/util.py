@@ -2,12 +2,17 @@
 import numpy as np
 
 def sort_scores_and_remove_overlap(n_top, scores, clip_indices):
-    """Sort the scores and return the n_top scores.
+    """Sort based on the inputted scores and return the n_top scores.
 
     Overlap is determined where the scene with the highest score is
     kept. Subsequent scenes with overlapping time indices are then
     ignored. This process is repeated until n_top non-overlapping scenes
     are found.
+
+    Scores can be any value that characterizes the interest level of a
+    scene, with the assumption that higher scores = higher interest.
+    For example, this could be the average volume of a scene or some
+    inferred interest level from some classifier.
 
     Arguments:
     ----------
