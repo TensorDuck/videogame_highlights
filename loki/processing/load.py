@@ -1,7 +1,5 @@
 """Class and methods for handling loading of video files"""
 from moviepy.editor import VideoFileClip
-from librosa import power_to_db
-import numpy as np
 
 class VideoClips():
     """Load multiple videos and write out relevant clips/audio
@@ -22,8 +20,8 @@ class VideoClips():
 
     def __init__(self, filenames):
         self.videos = []
+        self.audio_freq = None
         self.audios = None
-        self.decibels = None
         for name in filenames:
             self.videos.append(VideoFileClip(name))
 
@@ -34,7 +32,7 @@ class VideoClips():
 
         Arguments:
         ----------
-        time_stamps -- Nx3 list([int, float, float]):
+        time_stamps -- Nx3 list or np.ndarray:
             Nx3 List giving the video index, followed by the start and
             stop times in seconds.
 
@@ -53,14 +51,14 @@ class VideoClips():
         if write_names is None:
             write_names = []
             for stamp in time_stamps:
-                vid_idx = stamp[0]
+                vid_idx = int(stamp[0])
                 start_t = stamp[1]
                 end_t = stamp[2]
                 write_names.append(f"vid{vid_idx}_{start_t}-{end_t}{write_ext}")
 
-        #Iterate over time_stamps and write out the specified clips        
+        #Iterate over time_stamps and write out the specified clips
         for i_count, stamp in enumerate(time_stamps):
-            clip = self.videos[stamp[0]].subclip(stamp[1], stamp[2])
+            clip = self.videos[int(stamp[0])].subclip(stamp[1], stamp[2])
             clip.write_videofile(write_names[i_count], fps=write_fps)
 
     def compute_audio_waveform(self, freq=44100):
@@ -80,6 +78,8 @@ class VideoClips():
         audios -- list(np.ndarray):
             Return a list of audio waveforms.
         """
+
+        self.audio_freq = 44100
         self.audios = []
         for clip in self.videos:
             audio = clip.audio
@@ -87,26 +87,3 @@ class VideoClips():
             self.audios.append(wav)
 
         return self.audios
-
-    def compute_decibels(self):
-        """Compute the total decibels from an audio waveform
-
-        Compute the power by taking the square of the waveform. If the
-        audio is binaural, then sum up the power of each audio channel.
-        """
-
-        self.decibels = []
-
-        if self.audios is None:
-            self.compute_audio_waveform()
-
-        for binaural in self.audios:
-            power = binaural ** 2 # square for the power
-            #sum up binaural audio channel
-            if power.ndim == 2:
-                power = np.sum(power, axis=1)
-
-            decibel = power_to_db(power)
-            self.decibels.append(decibel)
-
-        return self.decibels
