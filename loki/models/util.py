@@ -63,7 +63,14 @@ def is_overlapping(all_scenes, check_scene):
     """Check the check_scene against all_scenes for overlap
 
     check_overlap() returns True if there is any overlap with previous
-    scenes
+    scenes. The Format of each check_scene and elements in all_scenes is
+    the same. The first element is an integer that denotes the video
+    index the scene is from. The next two elements are floats that
+    denote the start and stop times respectively. Therefore, check_scene
+    is not overlapping if its from a different video than a scene in
+    all_scenes. If they are from the same video, then they are not
+    overlapping if check_scene finishes before or starts after the
+    other scene.
 
     Arguments:
     ----------
