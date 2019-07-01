@@ -245,6 +245,6 @@ def _train_nn_classifier(train_clips, train_targets, n_epochs=100, batch_size=No
     nclassifier = models.NeuralNetworkClassifier()
 
     raw_audio = train_clips.compute_audio_waveform(mono=True)
-    nclassifier.train(raw_audio, train_targets, n_epochs="n_epochs", class_weights="class_weights", batch_size="batch_size")
+    nclassifier.train(raw_audio, train_targets, n_epochs=n_epochs, class_weights=class_weights, batch_size=batch_size)
 
     return nclassifier
