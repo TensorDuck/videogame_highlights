@@ -37,12 +37,13 @@ def sort_scores_and_remove_overlap(n_top, scores, clip_indices):
     sort_indices = np.argsort(scores * -1)
     n_scenes = len(sort_indices)
 
-    #use a while loop until n_top is found, hopefully this is short
-    n_found = 0
-    scene_index = 0
+    #use a while loop until n_top are found, hopefully this is short
+    n_found = 0 #count number of non-overlapping scores found
+    scene_index = 0 #keep track of number of scenes
     best_scenes = np.zeros((n_top,3))
     best_scores = []
     while n_found < n_top and scene_index < n_scenes:
+        #terminate the while loop if every scene is checked.
         this_idx = sort_indices[scene_index]
         this_scene = clip_indices[this_idx]
         this_score = scores[this_idx]
