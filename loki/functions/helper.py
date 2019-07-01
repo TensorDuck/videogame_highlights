@@ -127,8 +127,8 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
     x_avg = []
     y_avg = []
     for x,y in zip(x_trace,y_trace):
-        x_avg.append(average_window(x, clip_size))
-        y_avg.append(average_window(y, clip_size))
+        x_avg.append(average_over_window(x, clip_size))
+        y_avg.append(average_over_window(y, clip_size))
 
     #find the most interesting segment
     best_interest = 0
