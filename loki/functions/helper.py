@@ -190,9 +190,9 @@ def train_classifier(train_clips, train_targets, test_clips=None, test_targets=N
         A trained classifier.
     """
     if classifier == "volume":
-        classifer = _train_volume_classifier(train_clips, train_targets)
+        clf = _train_volume_classifier(train_clips, train_targets)
     elif classifier == "nn":
-        classifier = _train_nn_classifier(train_clips, train_targets)
+        clf = _train_nn_classifier(train_clips, train_targets, n_epochs=n_epochs, class_weights=class_weights, batch_size=batch_size)
     else:
         print("Invalid Classifier Specified. Keyword wargument classifier must be either 'volume' or 'nn'.")
 
@@ -201,7 +201,7 @@ def train_classifier(train_clips, train_targets, test_clips=None, test_targets=N
         results = classifier.infer(processing.compute_decibels(test_clips))
         evaluation.print_confusion_matrix(test_targets, results)
 
-    return classifier
+    return clf
 
 def _train_volume_classifier(train_clips, train_targets):
     """Get a trained volume classifier
