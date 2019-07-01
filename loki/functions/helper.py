@@ -198,7 +198,12 @@ def train_classifier(train_clips, train_targets, test_clips=None, test_targets=N
 
     if test_clips is not None and test_targets is not None:
         #compute validation of test_clips is given
-        results = classifier.infer(processing.compute_decibels(test_clips))
+        if classifier == "volume":
+            results = clf.infer(processing.compute_decibels(test_clips))
+        elif classifier == "nn":
+            results = clf.infer(test_clips.compute_audio_waveform(mono=True))
+        else:
+            print("Invalid Classifier Specified. Keyword wargument classifier must be either 'volume' or 'nn'.")
         evaluation.print_confusion_matrix(test_targets, results)
 
     return clf
