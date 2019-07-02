@@ -4,12 +4,38 @@ Machine Learning to automatically generate highlights from videogame streams
 Installation
 ============
 
-To add the relevant directories to the PYTHONPATH variable:
+Dependencies
+------------
+This package was written and tested for `Python 3.7.3` compiled using `GCC 7.3.0` in a `conda` environment.
+The following packages (and their dependencies) would need to be installed.
+The versions listed have been tested in my environment and works, but likely any more recent or backwards compatible version of those packages would also work.
 
+- [`numpy=1.16.3`](http://www.numpy.org/)
+- [`scipy=1.2.1`](http://www.scipy.org/)
+- [`tensorflow=1.13.1`](http://www.tensorflow.org/)
+- [`pytorch-cpu=1.1.0`](https://pytorch.org/)
+- [`scikit-learn=0.21.1`](https://scikit-learn.org/)
+- [`moviepy==1.0.0`](https://zulko.github.io/moviepy/)
+- [`resampy=0.2.1`](http://resampy.readthedocs.io/en/latest/)
+- [`six=1.12.0`](https://pythonhosted.org/six/)
+- [`librosa=0.6.3=py_0`](https://librosa.github.io/librosa/)
+- [`pysoundfile==0.9.0.post1`](https://pysoundfile.readthedocs.io/)
+- [`ffmpeg=4.1.3`](https://ffmpeg.org/)
+
+Loki Installation
+-----------------
+
+Once dependencies are installed, do:
 ```
 cd build
 source add_path.sh
 ```
+
+The `add_path.sh` script will add the relevant directories to the PYTHONPATH variable.
+It also sets the necessary environmental variables for finding the necessary checkpoint files.
+It will also check for the required VGGish checkpoint file and `wget` it if it is not found.
+This must be downloaded inside the build directory for the neural network classifier to work.
+It can be found in TensorFlow checkpoint format at: [VGGish model checkpoint](https://storage.googleapis.com/audioset/vggish_model.ckpt).
 
 The methods in the LOKI analysis package should then be usable as:
 
@@ -18,6 +44,8 @@ import loki
 
 clips = loki.VideoClips(["example.mp4"])
 ```
+
+Helper functions exist in `loki.functions.helper` which provide convenient functions for processing video files and outputting trained models.
 
 Developer Notes
 ===============
