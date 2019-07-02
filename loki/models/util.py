@@ -87,14 +87,11 @@ def is_overlapping(all_scenes, check_scene):
         #check if it's the same video
         if scene[0] == check_scene[0]:
             #check if there's any overlap
-            if scene[1] > check_scene[1] and scene[1] > check_scene[2]:
-                #scene happens after check_scene
-                pass
-            elif scene[2] < check_scene[1] and scene[2] < check_scene[2]:
-                #scene happens before check_scene
-                pass
-            else:
-                #there is overlap here
+            #first two check if the `scene` happens after `check_scene`
+            #last two checks if the `scene` happens before `check_scene`
+            #If all the checks are true, then keep going
+            #If one of the checks fail, break from loop and return True
+            if not (scene[1] > check_scene[1] and scene[1] > check_scene[2] and scene[2] < check_scene[1] and scene[2] < check_scene[2]):
                 return True
 
     #If the function gets here, there is no overlap
