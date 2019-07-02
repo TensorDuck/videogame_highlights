@@ -6,6 +6,7 @@
 !*.py
 !README.md
 !build/add_path.sh
+!LICENSE.md
 
 # ... even if they are in subdirectories
 !*/
