@@ -1,3 +1,9 @@
+"""This file is not my own work and was copied from an open source
+repository by TensorFlow, located at:
+github.com/tensorflow/models/tree/master/research/audioset/vggish
+
+Only import statements were changed to work within this package.
+"""
 # Copyright 2017 The TensorFlow Authors All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
