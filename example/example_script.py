@@ -51,6 +51,9 @@ if __name__ == "__main__":
     print("##################################################")
     print("Find The Most Interesting 1-Second Clip from test.mp4")
     print("##################################################")
-    #Use helper function to find the most relevant 1-second section
-    results = loki.helper.find_best_clip(test_files, 1, nn_checkpoint="example_nn")
+    #Use helper function to find the most relevant 0.96-second section
+    results = loki.helper.find_best_clip(test_files, 0.96, nn_checkpoint="example_nn")
+    #Use helper function to find the most relevant .288-second section
+    results = loki.helper.find_best_clip(test_files, 3*0.96, nn_checkpoint="example_nn")
+
     print(results)
