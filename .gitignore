@@ -6,6 +6,9 @@
 !*.py
 !*.md
 !build/add_path.sh
+!test.mp4
+!train_bad.mp4
+!train_good.mp4
 
 # ... even if they are in subdirectories
 !*/
