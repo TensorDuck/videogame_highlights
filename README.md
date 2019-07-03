@@ -54,6 +54,10 @@ new file or filetype to the repo, the .gitignore file must be amended.
 
 Acknowledgements
 ================
+This project was made as a consulting project at the Insight Artificial Intelligence Program.
+I am grateful for the support and guidance the Insight community provided.
+I also want to thank the company I consulted with, (Visor)[https://visor.gg/], for providing video files to train and test the model. 
+
 This application uses Open Source components, specifically files contained in `loki/models/vggish_tensorflow/`. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
 
 Project: vggish https://github.com/tensorflow/models/tree/master/research/audioset/vggish
