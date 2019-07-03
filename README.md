@@ -47,6 +47,21 @@ clips = loki.VideoClips(["example.mp4"])
 
 Helper functions exist in `loki.functions.helper` which provide convenient functions for processing video files and outputting trained models.
 
+Example
+=======
+To run the example and test the `loki` package, do:
+
+```
+cd example
+python -m example_script
+```
+If there are no errors, it will:
+1. Load the local .mp4 files.
+2. Train a neural network classifier on the video data to identify interesting moments. In this case, interesting is when there is banging on the tin lid.
+3. Perform inference on the training data and print out the confusion matrix.
+4. Compute an Interest vs. Time on the test mp4 file.
+5. Find the most interesting 1-second segment and 3-second segment in the test mp4 file.
+
 Developer Notes
 ===============
 The .gitignore file ignores all files by default. If you want to add a
@@ -56,7 +71,7 @@ Acknowledgements
 ================
 This project was made as a consulting project at the Insight Artificial Intelligence Program.
 I am grateful for the support and guidance the Insight community provided.
-I also want to thank the company I consulted with, [Visor](https://visor.gg/), for providing video files to train and test the model. 
+I also want to thank the company I consulted with, [Visor](https://visor.gg/), for providing video files to train and test the model.
 
 This application uses Open Source components, specifically files contained in `loki/models/vggish_tensorflow/`. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
 
