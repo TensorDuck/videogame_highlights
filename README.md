@@ -1,11 +1,11 @@
 # videogame_highlights
 Machine Learning to automatically generate highlights from videogame streams
 
-Installation
-============
+Getting Started
+===============
 
-Dependencies
-------------
+Prerequisites
+-------------
 This package was written and tested for `Python 3.7.3` compiled using `GCC 7.3.0` in a `conda` environment.
 The following packages (and their dependencies) would need to be installed.
 The versions listed have been tested in my environment and works, but likely any more recent or backwards compatible version of those packages would also work.
@@ -52,8 +52,8 @@ Developer Notes
 The .gitignore file ignores all files by default. If you want to add a
 new file or filetype to the repo, the .gitignore file must be amended.
 
-Credits
-=======
+Acknowledgements
+================
 This application uses Open Source components, specifically files contained in `loki/models/vggish_tensorflow/`. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
 
 Project: vggish https://github.com/tensorflow/models/tree/master/research/audioset/vggish
