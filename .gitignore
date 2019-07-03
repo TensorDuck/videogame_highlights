@@ -9,6 +9,7 @@
 !test.mp4
 !train_bad.mp4
 !train_good.mp4
+!LICENSE.md
 
 # ... even if they are in subdirectories
 !*/
