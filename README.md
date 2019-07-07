@@ -10,17 +10,21 @@ This package was written and tested for `Python 3.7.3` compiled using `GCC 7.3.0
 The following packages (and their dependencies) would need to be installed.
 The versions listed have been tested in my environment and works, but likely any more recent or backwards compatible version of those packages would also work.
 
+*Install with conda*
 - [`numpy=1.16.3`](http://www.numpy.org/)
 - [`scipy=1.2.1`](http://www.scipy.org/)
 - [`tensorflow=1.13.1`](http://www.tensorflow.org/)
 - [`pytorch-cpu=1.1.0`](https://pytorch.org/)
 - [`scikit-learn=0.21.1`](https://scikit-learn.org/)
-- [`moviepy=1.0.0`](https://zulko.github.io/moviepy/)
 - [`resampy=0.2.1`](http://resampy.readthedocs.io/en/latest/)
 - [`six=1.12.0`](https://pythonhosted.org/six/)
 - [`librosa=0.6.3`](https://librosa.github.io/librosa/)
-- [`pysoundfile=0.9.0.post1`](https://pysoundfile.readthedocs.io/)
 - [`ffmpeg=4.1.3`](https://ffmpeg.org/)
+
+*Install with pip*
+- [`moviepy=1.0.0`](https://zulko.github.io/moviepy/)
+- [`pysoundfile=0.9.0.post1`](https://pysoundfile.readthedocs.io/)
+
 
 Loki Installation
 -----------------
