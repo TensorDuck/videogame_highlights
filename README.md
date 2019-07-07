@@ -15,11 +15,11 @@ The versions listed have been tested in my environment and works, but likely any
 - [`tensorflow=1.13.1`](http://www.tensorflow.org/)
 - [`pytorch-cpu=1.1.0`](https://pytorch.org/)
 - [`scikit-learn=0.21.1`](https://scikit-learn.org/)
-- [`moviepy==1.0.0`](https://zulko.github.io/moviepy/)
+- [`moviepy=1.0.0`](https://zulko.github.io/moviepy/)
 - [`resampy=0.2.1`](http://resampy.readthedocs.io/en/latest/)
 - [`six=1.12.0`](https://pythonhosted.org/six/)
-- [`librosa=0.6.3=py_0`](https://librosa.github.io/librosa/)
-- [`pysoundfile==0.9.0.post1`](https://pysoundfile.readthedocs.io/)
+- [`librosa=0.6.3`](https://librosa.github.io/librosa/)
+- [`pysoundfile=0.9.0.post1`](https://pysoundfile.readthedocs.io/)
 - [`ffmpeg=4.1.3`](https://ffmpeg.org/)
 
 Loki Installation
