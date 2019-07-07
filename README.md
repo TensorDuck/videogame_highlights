@@ -59,12 +59,15 @@ To run the example and test the `loki` package, do:
 cd example
 python -m example_script
 ```
-If there are no errors, it will:
+If there are no errors, this example script will train a model to identify when there is a loud banging sound in a video.
+It will demonstrate this in these steps:
 1. Load the local .mp4 files.
 2. Train a neural network classifier on the video data to identify interesting moments. In this case, interesting is when there is banging on the tin lid.
 3. Perform inference on the training data and print out the confusion matrix.
 4. Compute an Interest vs. Time on the test mp4 file.
 5. Find the most interesting 1-second segment and 3-second segment in the test mp4 file.
+
+If a user wants to understand how the more primitive classes work, look in `loki.functions.helper` to see the details of how helper functions are used. 
 
 Developer Notes
 ===============
