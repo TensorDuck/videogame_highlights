@@ -115,7 +115,7 @@ def find_best_clip(video_files, clip_length, nn_checkpoint="nn_model"):
             window.
     """
     #0.96 is the length of time VGGish processes as a single embedding
-    clip_size = int(np.floor(clip_length / 0.96))
+    clip_size = int(np.ceil(clip_length / 0.96))
     nnclass = models.NeuralNetworkClassifier()
     nnclass.load(nn_checkpoint)
     vclips = processing.VideoClips(video_files)
