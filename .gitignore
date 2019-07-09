@@ -4,8 +4,11 @@
 # But no these files
 !.gitignore
 !*.py
-!README.md
+!*.md
 !build/add_path.sh
+!test.mp4
+!train_bad.mp4
+!train_good.mp4
 !LICENSE.md
 
 # ... even if they are in subdirectories

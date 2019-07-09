@@ -17,18 +17,19 @@ def compute_decibels(data, freq=44100):
     ------------------
     freq -- int -- default=44100
         Frequency at which to extract the audio.
-    """
 
+    Return:
+    -------
+    decibels -- list[np.ndarray]:
+        The loudness over time of each inputted clip.
+    """
     decibels = []
 
-    if data.audios is None:
-        all_audio = data.compute_audio_waveform(freq=freq)
-    else:
-        all_audio = data.audios
+    all_audio = data.compute_audio_waveform(freq=freq)
 
     for binaural in all_audio:
         power = binaural ** 2 # square for the power
-        #sum up binaural audio channel
+        #sum up dual-channel audio if the audio is dual-channel
         if power.ndim == 2:
             power = np.sum(power, axis=1)
 

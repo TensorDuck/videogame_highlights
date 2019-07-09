@@ -4,6 +4,9 @@ import sklearn.metrics as skmet
 def get_confusion_matrix(actual, predicted):
     """Get the confusion matrix and statistics
 
+    This is a helper function that leverages sklearn to collect the
+    desired statistics.
+
     Arguments:
     ----------
     actual -- np.ndarray:

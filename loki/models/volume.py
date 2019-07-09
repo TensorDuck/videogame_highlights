@@ -5,23 +5,6 @@ import sklearn.metrics as skmet
 
 from .util import sort_scores_and_remove_overlap
 
-def compute_average_volume(audioclip):
-    """Return average volume in an audioclip
-
-    Arguments:
-    ----------
-    audioclip -- np.ndarray:
-        A trace of the volume.
-
-    Return:
-    -------
-    avg_loudness -- float:
-        Average value of the volume over the whole trace.
-    """
-    avg_loudness = np.sum(audioclip) / float(len(audioclip))
-
-    return avg_loudness
-
 class VolumeClassifier():
     """A classifier that classifiers interesting scenes based on volume
 
@@ -35,8 +18,6 @@ class VolumeClassifier():
         Scenes with average volume above volume_cutoff are classified as
         interesting. Those less than or equal to volume_cutoff are
         classified as uninteresting.
-
-
     """
 
     def __init__(self):
@@ -83,11 +64,14 @@ class VolumeClassifier():
 
         Train the volume classifier (currently a binary classifier).
         Default loss function is the hamming loss which, for a binary
-        classifier, is equivalent to 1-accuracy.
+        classifier, is equivalent to accuracy.
+        The training here is simply finding the threshold that maximizes
+        the accuracy. It's not technically training but the method is
+        named such for consistency.
 
         Arguments
         ---------
-        training_x -- np.ndarray or list:
+        training_x -- list[np.ndarray]:
             The volume (in decibels) of the training data. Of length N.
         training_y -- np.ndarray or list:
             The corresponding classes of the training data. Also of
@@ -96,7 +80,7 @@ class VolumeClassifier():
         """
         average_loudness = []
         for audioclip in training_x:
-            average_loudness.append(compute_average_volume(audioclip))
+            average_loudness.append(audioclip.mean())
         average_loudness = np.array(average_loudness)
 
         best_loss = 1 # hamming loss goes from 0 - 1
@@ -129,7 +113,7 @@ class VolumeClassifier():
 
         Arguments:
         ----------
-        test_x -- np.ndarray or list:
+        test_x -- list[np.ndarray]:
             The volume (in decibels) of the test data.
 
         Return:
@@ -139,7 +123,7 @@ class VolumeClassifier():
          """
         classified = []
         for audioclip in test_x:
-            avg_volume = compute_average_volume(audioclip)
+            avg_volume = audioclip.mean()
             if avg_volume > self.volume_cutoff:
                 classified.append(1)
             else:
@@ -172,6 +156,11 @@ class VolumeModel():
         every volume array to determine the clips with the overall
         loudest moments. Return the video index and time index
         corresponding to the overall loudest portion.
+
+        Note, the inputted loudness are not expected to be the same
+        length as the length of videos would vary a great deal. Assuming
+        every video is atleast longer than self.search_length, then the
+        outputted loudest segments would be of standard length.
 
         Arguments:
         ----------
