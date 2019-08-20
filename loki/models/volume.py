@@ -105,7 +105,7 @@ class VolumeClassifier():
 
         self.volume_cutoff = best_cutoff
 
-    def infer(self, test_x):
+    def infer(self, test_x, score=False):
         """Make an inference on the test data based on trained model
 
         For instances in test_x where the average volume is greater than
@@ -115,6 +115,10 @@ class VolumeClassifier():
         ----------
         test_x -- list[np.ndarray]:
             The volume (in decibels) of the test data.
+        score -- bool -- default=False:
+            If False, return the classes based on the volume threshold.
+            If True, return the non-thresholded average volume of each
+            scene.
 
         Return:
         -------
@@ -124,10 +128,13 @@ class VolumeClassifier():
         classified = []
         for audioclip in test_x:
             avg_volume = audioclip.mean()
-            if avg_volume > self.volume_cutoff:
-                classified.append(1)
+            if score:
+                classified.append(avg_volume)
             else:
-                classified.append(0)
+                if avg_volume > self.volume_cutoff:
+                    classified.append(1)
+                else:
+                    classified.append(0)
 
         return np.array(classified)
 

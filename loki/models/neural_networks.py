@@ -190,7 +190,7 @@ class NeuralNetworkClassifier():
             if epoch % 10 == 0:
                 print(f"Epoch {epoch} Loss: {total_loss}")
 
-    def infer(self, test_x):
+    def infer(self, test_x, threshold=0.5):
         """Infer the classes on inputted audio waveform
 
         A clip is interesting if the average interest level over the
@@ -200,6 +200,9 @@ class NeuralNetworkClassifier():
         ----------
         test_x -- list[np.ndarray]:
             List of raw audio (mono-channel) waveforms.
+        threshold -- float -- default=0.5:
+            Threshold value for classifying into either class 1 or 0.
+            If None, then return the raw non-thresholded scores.
 
         Return:
         -------
@@ -212,10 +215,13 @@ class NeuralNetworkClassifier():
             y = self.model(torch.FloatTensor(x))
             y_array = y.detach().numpy()
             avg = y_array.mean()
-            if avg > 0.5: #threshold is set to 0.5
-                inferred.append(1)
+            if threshold is None:
+                inferred.append(avg)
             else:
-                inferred.append(0)
+                if avg > threshold: #threshold is set to 0.5
+                    inferred.append(1)
+                else:
+                    inferred.append(0)
 
         return np.array(inferred)
 
